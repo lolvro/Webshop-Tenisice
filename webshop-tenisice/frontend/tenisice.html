@@ -46,5 +46,18 @@
     </form>
 
     <script src="app.js"></script>
+
+    <footer class="footer">
+    <div class="footer-content">
+        <p>© <span id="year"></span> Webshop Tenisice</p>
+        <p>Izradili: <strong>Lovro</strong> i <strong>Fran</strong></p>
+        <p>Veleučilište u Rijeci</p>
+    </div>
+    </footer>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
