@@ -18,7 +18,7 @@
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
 
-        <button class="nav-btn">Košarica</button>
+        <a href="cart.html" class="nav-btn">Košarica</a>
     </nav>
 
     <script src="navbar.js"></script>
@@ -38,6 +38,18 @@
     <!-- <h1>Webshop Tenisice</h1>-->
 
     <div id="notifikacija" class="skriveno"></div>
+
+    <h3>Sortiranje</h3>
+    <select id="sortiranje">
+        <option value="">Sortiraj</option>
+        <option value="asc">Cijena ↑</option>
+        <option value="desc">Cijena ↓</option>
+    </select>
+
+    <label for="filter-brend">Filtriraj po brendu:</label>
+    <select id="filter-brend">
+        <option value="">Svi brendovi</option>
+    </select>
 
     <div id="lista-tenisica"></div>
 

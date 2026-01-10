@@ -1,12 +1,34 @@
-
-
+let sveTenisice = [];
 const listaTenisica = document.getElementById('lista-tenisica') || document.getElementById('lista-tenisica-index');
 const jeIndexStranica = !!document.getElementById('lista-tenisica-index');
 const formaDodaj = document.getElementById('forma-dodaj-tenisicu');
 const notifikacija = document.getElementById('notifikacija');
+const sortiranjeSelect = document.getElementById('sortiranje');
+const filterBrend = document.getElementById('filter-brend');
 
-const backendUrl = '/tenisice';
+const backendUrl = 'http://localhost:3000/tenisice';
 let tenisicaZaUrediti = null;
+
+if (listaTenisica) {
+    prikaziTenisice();
+}
+
+if (filterBrend) {
+    filterBrend.addEventListener('change', () => {
+        primijeniFiltere();
+    });
+}
+
+document.getElementById('sortiranje').addEventListener('change', e => {
+    const smjer = e.target.value;
+    prikaziTenisice(smjer);
+    });
+if (sortiranjeSelect) {
+    sortiranjeSelect.addEventListener('change', e => {
+        prikaziTenisice(e.target.value);
+    });
+}
+
 
 function prikaziNotifikaciju(poruka, tip = 'uspjeh') {
     notifikacija.textContent = poruka;
@@ -14,33 +36,27 @@ function prikaziNotifikaciju(poruka, tip = 'uspjeh') {
     setTimeout(() => { notifikacija.className = 'skriveno'; }, 3000);
 }
 
-function prikaziTenisice() {
-    listaTenisica.innerHTML = '';
+function prikaziTenisice(sort = '') {
+    listaTenisica.innerHTML = '<p>Učitavanje tenisica...</p>';
+
     fetch(backendUrl)
-        .then(res => res.json())
-        .then(data => {
-            if (data.length === 0) {
-                listaTenisica.innerHTML = '<p>Nema tenisica u bazi.</p>';
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Greška u odgovoru servera");
             }
-            data.forEach(t => {
-                const div = document.createElement('div');
-                div.classList.add(jeIndexStranica ? 'tenisica-index' : 'tenisica');
-                div.innerHTML = `
-                    <h3>${t.naziv}</h3>
-                    <p>Brend: ${t.brend}</p>
-                    <p>Cijena: ${t.cijena} €</p>
-                    <p>${t.opis}</p>
-                    <button onclick="obrisiTenisicu(${t.id})">Obriši</button>
-                    <button onclick="urediTenisicu(${t.id})">Uredi</button>
-                `;
-                listaTenisica.appendChild(div);
-            });
+            return res.json();
+        })
+        .then(data => {
+            sveTenisice = data;
+            popuniBrendove(data);
+            primijeniFiltere();
         })
         .catch(err => {
             console.error(err);
             listaTenisica.innerHTML = '<p>Greška pri dohvaćanju tenisica.</p>';
         });
-}
+
+    }
 
 formaDodaj.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -85,11 +101,26 @@ formaDodaj.addEventListener('submit', (e) => {
 });
 
 function obrisiTenisicu(id) {
-    if (!confirm('Jeste li sigurni da želite obrisati ovu tenisicu?')) return;
-    fetch(`${backendUrl}/${id}`, { method: 'DELETE' })
-        .then(() => { prikaziTenisice(); prikaziNotifikaciju('Tenisica je uspješno obrisana!'); })
-        .catch(() => prikaziNotifikaciju('Greška prilikom brisanja!', 'greska'));
+    if (!confirm("Jeste li sigurni da želite obrisati ovu tenisicu?")) {
+        return;
+    }
+
+    fetch(`${backendUrl}/${id}`, {
+        method: 'DELETE'
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Greška pri brisanju");
+        }
+        ukloniProizvodIzKosaricePoID(id);
+        prikaziTenisice();
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Došlo je do greške pri brisanju tenisice.");
+    });
 }
+
 
 function urediTenisicu(id) {
     fetch(backendUrl)
@@ -97,7 +128,7 @@ function urediTenisicu(id) {
         .then(data => {
             const t = data.find(item => item.id === id);
             if (t) {
-                document.getElementById('naziv').value = t.naziv;
+                document.getElementById('naziv').value = t.naziv;   
                 document.getElementById('brend').value = t.brend;
                 document.getElementById('cijena').value = t.cijena;
                 document.getElementById('opis').value = t.opis;
@@ -105,6 +136,79 @@ function urediTenisicu(id) {
             }
         });
 }
+
+function popuniBrendove(tenisice) {
+    const select = document.getElementById('filter-brend');
+    if (!select) return;
+
+    const brendovi = [...new Set(tenisice.map(t => t.brend))];
+
+    select.innerHTML = '<option value="">Svi brendovi</option>';
+
+    brendovi.forEach(brend => {
+        const option = document.createElement('option');
+        option.value = brend;
+        option.textContent = brend;
+        select.appendChild(option);
+    });
+}
+
+function primijeniFiltere() {
+    let filtrirane = [...sveTenisice];
+
+    const brend = document.getElementById('filter-brend')?.value;
+    const sort = document.getElementById('sortiranje')?.value;
+
+    if (brend) {
+        filtrirane = filtrirane.filter(t => t.brend === brend);
+    }
+
+    if (sort === 'asc') {
+        filtrirane.sort((a, b) => a.cijena - b.cijena);
+    } else if (sort === 'desc') {
+        filtrirane.sort((a, b) => b.cijena - a.cijena);
+    }
+
+    renderTenisice(filtrirane);
+}
+
+function renderTenisice(lista) {
+    listaTenisica.innerHTML = '';
+
+    if (lista.length === 0) {
+        listaTenisica.innerHTML = '<p>Nema proizvoda u ponudi.</p>';
+        return;
+    }
+
+    lista.forEach(t => {
+        const div = document.createElement('div');
+
+        // ⬇️ OVO JE KLJUČNO – vraća dizajn
+        div.classList.add(
+            listaTenisica.id === 'lista-tenisica-index'
+                ? 'tenisica-index'
+                : 'tenisica'
+        );
+
+        div.innerHTML = `
+            <h3>${t.naziv}</h3>
+            <p>Brend: ${t.brend}</p>
+            <p>Cijena: ${t.cijena} €</p>
+            <p>${t.opis ?? ''}</p>
+
+            <button onclick="dodajUKosaricu(${t.id}, '${t.naziv}', ${t.cijena})">
+                Dodaj u košaricu
+            </button>
+
+            <button onclick="urediTenisicu(${t.id})">Uredi</button>
+            <button onclick="obrisiTenisicu(${t.id})">Obriši</button>
+        `;
+
+        listaTenisica.appendChild(div);
+    });
+}
+
+
 
 // Prikaz tenisica pri učitavanju
 prikaziTenisice();
