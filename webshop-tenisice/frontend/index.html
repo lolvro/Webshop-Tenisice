@@ -18,7 +18,8 @@
                 <li><a href="kontakt.html">Kontakt</a></li>
             </ul>
 
-        <button class="nav-btn">Košarica</button>
+        <a href="cart.html" class="nav-btn">Košarica</a>
+
     </nav>
 
     <script src="navbar.js"></script>
@@ -39,6 +40,19 @@
 
     <div id="notifikacija" class="skriveno"></div>
 
+    <h3>Sortiranje</h3>
+    <select id="sortiranje">
+        <option value="">Sortiraj</option>
+        <option value="asc">Cijena ↑</option>
+        <option value="desc">Cijena ↓</option>
+    </select>
+
+    <label for="filter-brend">Filtriraj po brendu:</label>
+    <select id="filter-brend">
+        <option value="">Svi brendovi</option>
+    </select>
+
+
     <div id="lista-tenisica-index"></div>
 
         <script src="scroller.js"></script>
@@ -54,11 +68,12 @@
     </form>
 
     <script src="app.js"></script>
+    <script src="cart.js"></script>
 
     <footer class="footer">
     <div class="footer-content">
         <p>© <span id="year"></span> Webshop Tenisice</p>
-        <p>Izradili: <strong>Lovro</strong> i <strong>Fran</strong></p>
+        <p>Izradili: <strong>L. Ursić</strong> i <strong>F. Hudjik</strong></p>
         <p>Veleučilište u Rijeci</p>
     </div>
     </footer>

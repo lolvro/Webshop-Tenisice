@@ -12,10 +12,10 @@ const PORT = 3000;
 
 // Povezivanje s MySQL bazom
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'lolvro',       // promijeni po potrebi
-    password: 'Rokulja123#4',       // tvoja lozinka ako postoji
-    database: 'webshop'
+    host: 'ucka.veleri.hr',
+    user: 'fjhudjik',   // promijeni po potrebi
+    password: '11',       // tvoja lozinka ako postoji
+    database: 'fjhudjik'
 });
 
 //Frontend
