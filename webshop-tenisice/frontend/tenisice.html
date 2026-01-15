@@ -9,7 +9,7 @@
 <body>
 
     <nav class="navbar">
-        <div class="nav-logo">Webshop Tenisice</div>
+        <a href="index.html" class="nav-logo">Webshop Tenisice</a>
 
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Početna</a></li>
@@ -37,33 +37,40 @@
 
     <!-- <h1>Webshop Tenisice</h1>-->
 
-    <div class="kontrole">
-    <div id="notifikacija" class="skriveno"></div>
+<div class="kontrole-wrapper">
+<div class="kontrole">
 
-    <div class="kontrola">
-        <h3>Sortiranje</h3>
-        <select id="sortiranje">
-            <option value="">Sortiraj</option>
-            <option value="asc">Cijena ↑</option>
-            <option value="desc">Cijena ↓</option>
-        </select>
+    <div class="kontrole-lijevo">
+        <div class="kontrola">
+            <h3>Sortiranje</h3>
+            <select id="sortiranje">
+                <option value="">Sortiraj</option>
+                <option value="asc">Cijena ↑</option>
+                <option value="desc">Cijena ↓</option>
+            </select>
+        </div>
+
+        <div class="kontrola">
+            <label for="filter-brend">Filtriraj po brendu</label>
+            <select id="filter-brend">
+                <option value="">Svi brendovi</option>
+            </select>
+        </div>
     </div>
 
-    <div class="kontrola">
-        <label for="filter-brend">Filtriraj po brendu</label>
-        <select id="filter-brend">
-            <option value="">Svi brendovi</option>
-        </select>
+    <div class="kontrole-desno">
+        <div id="notifikacija" class="skriveno"></div>
     </div>
+
+</div>
 </div>
 
     <div id="lista-tenisica"></div>
 
-   <form id="forma-dodaj-tenisicu">
-        
-    </form>
+    
 
     <script src="app.js"></script>
+    <script src="cart.js"></script>
 
     <footer class="footer">
     <div class="footer-content">

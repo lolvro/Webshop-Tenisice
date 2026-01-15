@@ -33,6 +33,7 @@
   font-weight: 700;
   color: #111;
   letter-spacing: -0.5px;
+  text-decoration: none;
 }
 
 /* LINKS */
@@ -92,6 +93,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
+  text-decoration: none;
 }
 
 .nav-btn:hover {
@@ -452,7 +454,7 @@ form input, form textarea, form button {
 }
 
 form button {
-    background-color: #2ecc71;
+    background-color: #535353;
     color: white;
     border: none;
     font-weight: bold;
@@ -461,7 +463,7 @@ form button {
 }
 
 form button:hover {
-    background-color: #27ae60;
+    background-color: #181818;
 }
 
 #notifikacija {
@@ -479,7 +481,7 @@ form button:hover {
 }
 
 #notifikacija.uspjeh {
-    background-color: #2ecc71;
+    background-color: #696b6a;
     color: white;
 }
 
@@ -507,18 +509,29 @@ form button:hover {
 }
 
 /* Wrapper za sortiranje i filter */
-.kontrole {
-    max-width: 900px;
-    margin: 20px auto 40px;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 
+.kontrole-wrapper {
+    background: #eee;           
+    border-radius: 20px;
+    padding: 20px 30px;
+    max-width: 700px;
+    margin: 30px auto;          
+}
+
+.kontrole {
     display: flex;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.kontrole-lijevo {
+    display: flex;
     gap: 20px;
-    align-items: flex-end;
+}
+
+.kontrole-desno {
+    min-width: 250px; /* REZERVIRANI PROSTOR */
+    text-align: right;
 }
 
 /* Pojedinačna kontrola */
@@ -567,12 +580,7 @@ form button:hover {
 
 /* Notifikacija */
 #notifikacija {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: 600;
-    display: none;
+    font-weight: 500;
 }
 
 #notifikacija.vidljivo {
@@ -696,6 +704,17 @@ form button:hover {
     font-style: italic;
     color: #7f8c8d;
     padding: 20px;
+}
+
+.nema-proizvoda {
+    color: #000;
+    font-size: 1.6rem;
+    font-weight: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 150px;
 }
 
 #ukupno {

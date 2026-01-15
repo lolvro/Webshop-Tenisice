@@ -114,6 +114,7 @@ function obrisiTenisicu(id) {
         }
         ukloniProizvodIzKosaricePoID(id);
         prikaziTenisice();
+        prikaziNotifikaciju("Tenisica je uspješno izbrisana!");
     })
     .catch(err => {
         console.error(err);
@@ -176,14 +177,15 @@ function renderTenisice(lista) {
     listaTenisica.innerHTML = '';
 
     if (lista.length === 0) {
-        listaTenisica.innerHTML = '<p>Nema proizvoda u ponudi.</p>';
+        listaTenisica.innerHTML = `
+        <p class="nema-proizvoda">Nema proizvoda u ponudi.</p>`;
         return;
     }
 
+    const jeAdminStranica = window.location.pathname.includes('index.html');
+
     lista.forEach(t => {
         const div = document.createElement('div');
-
-        // ⬇️ OVO JE KLJUČNO – vraća dizajn
         div.classList.add(
             listaTenisica.id === 'lista-tenisica-index'
                 ? 'tenisica-index'
@@ -200,15 +202,19 @@ function renderTenisice(lista) {
                 Dodaj u košaricu
             </button>
 
-            <button onclick="urediTenisicu(${t.id})">Uredi</button>
-            <button onclick="obrisiTenisicu(${t.id})">Obriši</button>
+            ${
+                jeAdminStranica
+                    ? `
+                        <button onclick="urediTenisicu(${t.id})">Uredi</button>
+                        <button onclick="obrisiTenisicu(${t.id})">Obriši</button>
+                      `
+                    : ''
+            }
         `;
 
         listaTenisica.appendChild(div);
     });
 }
-
-
 
 // Prikaz tenisica pri učitavanju
 prikaziTenisice();

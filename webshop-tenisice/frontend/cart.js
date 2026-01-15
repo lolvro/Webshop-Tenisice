@@ -25,7 +25,7 @@ function dodajUKosaricu(id, naziv, cijena) {
     }
 
     spremiKosaricu(kosarica);
-    alert("Proizvod je dodan u košaricu.");
+    prikaziNotifikaciju("Proizvod je dodan u košaricu!");
 }
 
 function prikaziKosaricu() {
